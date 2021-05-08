@@ -6,7 +6,8 @@ let mouseConstraints;
 let ball;
 let sling;
 let firing = false;
-let chances = 2;
+let chances = 100;
+let borders = [];
 
 function initializeGame() {
     updateDom();
@@ -18,23 +19,32 @@ function initializeGame() {
             width: 1600, height: 800, wireframes: false
         }
     });
-    ground = Matter.Bodies.rectangle(1200, 500, 300, 20, {isStatic: true});
+    ground = Matter.Bodies.rectangle(1000, 500, 300, 20, {isStatic: true});
+    //left side
+    borders.push(Matter.Bodies.rectangle(0, 0, 10, 1600, {isStatic: true ,  restitution:0.8}));
+    //top
+    borders.push(Matter.Bodies.rectangle(0, 0, 3200, 200, {isStatic: true , restitution:0.8}));
+
     mouse = Matter.Mouse.create(render.canvas);
+
     mouseConstraints = Matter.MouseConstraint.create(engine, {mouse, constraint: {render: {visible: false}}})
 }
 
 function createAssets() {
     // let boxA = Matter.Bodies.rectangle(400, 200, 80, 80);
     // let boxB = Matter.Bodies.rectangle(300, 200, 80, 80);
-    ball = Matter.Bodies.circle(300, 600, 20);
+    ball = Matter.Bodies.circle(300, 600, 20 , {restitution:0.8});
     sling = Matter.Constraint.create({
         pointA: {x: 300, y: 600},
         bodyB: ball, stiffness: 0.05
     })
-    let stack = Matter.Composites.stack(1100, 200, 4, 4, 0, 0, function (x, y) {
-        return Matter.Bodies.polygon(x, y, 8, 30);
+    let stack = Matter.Composites.stack(900, 200, 4, 4, 0, 0, function (x, y) {
+        return Matter.Bodies.circle(x, y, 15,{restitution:0.8});
+
     })
-    return [stack, ball, sling, ground, mouseConstraints];
+
+
+    return [stack, ball, sling, ground, mouseConstraints , ...borders];
 }
 
 function updateDom(){
@@ -57,10 +67,11 @@ function main() {
         if (e.body === ball) firing = true
     })
 
+
     Matter.Events.on(engine, 'afterUpdate', (e) => {
         if (firing && Math.abs(ball.position.x - 300) < 20 && Math.abs(ball.position.y - 600) < 20 && chances > 0) {
             // ball
-            ball = Matter.Bodies.circle(300, 600, 20);
+            ball = Matter.Bodies.circle(300, 600, 20 , {restitution:0.8});
             Matter.World.add(engine.world, ball);
             sling.bodyB = ball;
             firing =false;
@@ -68,6 +79,7 @@ function main() {
             updateDom();
         }
     })
+
 
     Matter.World.add(engine.world, worldObjects)
     Matter.Engine.run(engine);
