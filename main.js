@@ -6,7 +6,7 @@ let mouseConstraints;
 let ball;
 let sling;
 let firing = false;
-let chances = 100;
+let chances = 10;
 let borders = [];
 let score = new Set();
 
@@ -74,7 +74,7 @@ function createAssets() {
 }
 
 function updateDom() {
-    document.querySelector("#chances").innerText = `Chances left ${chances}`
+    document.querySelector("#chances").innerText = `Chances left : ( ${chances} )`
 }
 
 function restart() {
