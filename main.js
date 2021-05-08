@@ -6,7 +6,7 @@ let mouseConstraints;
 let ball;
 let sling;
 let firing = false;
-let chances = 10;
+let chances = 1;
 let borders = [];
 let score = new Set();
 let wireFrameMode = false;
@@ -77,7 +77,7 @@ function createAssets() {
 }
 
 function updateDom() {
-    document.querySelector("#chances").innerText = `Chances left : ( ${chances} )`
+    document.querySelector("#chances").innerText = `Life : ( ${chances} )`
 }
 
 function restart() {
@@ -94,13 +94,16 @@ function main() {
         if (e.body === ball) firing = true;
 
         if (e.body.name === "block") {
-            alert("you cannot do this");
+            alert("you broke the rule");
             restart();
         }
     })
 
 
     Matter.Events.on(engine, 'afterUpdate', (e) => {
+        if(chances <= 0 && score.size < 16){
+            document.querySelector("#note").innerText = `You loose the game !!!!! your score was ${score.size}`
+        }
         if (firing && Math.abs(ball.position.x - 300) < 20 && Math.abs(ball.position.y - 600) < 20 && chances > 0) {
             // ball
             ball = Matter.Bodies.circle(300, 600, 20, {restitution: 0.8});
@@ -115,16 +118,12 @@ function main() {
 
         event.pairs.forEach((el) => {
             if (el.bodyA.name && el.bodyB.name && el.bodyA.name !== el.bodyB.name)
-                // console.log('**' ,el.bodyA.name , el.bodyB.name )
                 if (el.bodyA.name === "floor" && el.bodyB.name === "block") {
                     score.add(el.bodyB.id)
-                    // score += 1
-                    console.log(score.size);
                     if (score.size === 16) {
-                        return alert("you won the game")
+                        document.querySelector("#note").innerText = `You won the game !!!!! with  ${chances} left`
                     }
                 }
-            // if(el.bodyA.name)
         })
     })
 
