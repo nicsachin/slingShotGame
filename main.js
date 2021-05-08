@@ -8,9 +8,12 @@ function initializeGame() {
     engine = Matter.Engine.create();
     render = Matter.Render.create({
         element: document.body,
-        engine: engine
+        engine: engine,
+        options : {
+            width  :1600 , height : 800 , wireframes:false
+        }
     });
-    ground = Matter.Bodies.rectangle(400, 600, 810, 60, {isStatic: true});
+    ground = Matter.Bodies.rectangle(1200, 500, 300, 20, {isStatic: true});
     mouse = Matter.Mouse.create(render.canvas);
     mouseConstraints = Matter.MouseConstraint.create(engine, {mouse, constraint: {render: {visible: false}}})
 }
@@ -18,10 +21,15 @@ function initializeGame() {
 function createAssets() {
     // let boxA = Matter.Bodies.rectangle(400, 200, 80, 80);
     // let boxB = Matter.Bodies.rectangle(300, 200, 80, 80);
-    let stack = Matter.Composites.stack(200, 200, 4, 4, 0, 0, function (x, y) {
-        return Matter.Bodies.rectangle(x, y, 80, 80);
+    let ball = Matter.Bodies.circle(300 , 600,20);
+    let sling = Matter.Constraint.create({
+        pointA : {x : 300 , y : 600},
+        bodyB : ball , stiffness :0.05
     })
-    return [stack, ground, mouseConstraints];
+    let stack = Matter.Composites.stack(1100, 200, 4, 4, 0, 0, function (x, y) {
+        return Matter.Bodies.polygon(x, y, 8, 30);
+    })
+    return [stack,ball,sling, ground, mouseConstraints];
 }
 
 
