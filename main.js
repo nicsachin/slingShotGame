@@ -78,6 +78,7 @@ function createAssets() {
 
 function updateDom() {
     document.querySelector("#chances").innerText = `Life : ( ${chances} )`
+
 }
 
 function restart() {
@@ -120,6 +121,8 @@ function main() {
             if (el.bodyA.name && el.bodyB.name && el.bodyA.name !== el.bodyB.name)
                 if (el.bodyA.name === "floor" && el.bodyB.name === "block") {
                     score.add(el.bodyB.id)
+                    document.querySelector("#score").innerText = `Score : ( ${score.size} )`
+
                     if (score.size === 16) {
                         document.querySelector("#note").innerText = `You won the game !!!!! with  ${chances} left`
                     }
