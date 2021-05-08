@@ -14,39 +14,40 @@ function initializeGame() {
     updateDom();
     engine = Matter.Engine.create();
     render = Matter.Render.create({
-        element: document.body,
+        element: document.querySelector(".mainView"),
         engine: engine,
         options: {
-            width: document.body.clientWidth, height: 800, wireframes: false
+            width: document.body.clientWidth, height: 800, wireframes: false, background: '#607D8B'
         }
     });
-    ground = Matter.Bodies.rectangle(1000, 500, 300, 20, {isStatic: true});
+    ground = Matter.Bodies.rectangle(1000, 500, 300, 20, {isStatic: true , render : {fillStyle : "#3B3C36"}});
     //left side
     borders.push(Matter.Bodies.rectangle(0, 0, 10, document.body.clientWidth, {
         isStatic: true,
         restitution: 0.8,
-        render: {fillStyle: "red"}
+        render: {fillStyle: "#3B3C36"}
     }));
     //top
     borders.push(Matter.Bodies.rectangle(0, 0, document.body.clientWidth * 2, 50, {
         isStatic: true,
         restitution: 0.8,
-        render: {fillStyle: "red"}
+        render: {fillStyle: "#3B3C36"}
     }));
     //bottom
     borders.push(Matter.Bodies.rectangle(0, 800, document.body.clientWidth * 2, 50, {
         isStatic: true,
         restitution: 0.8,
-        render: {fillStyle: "red"},
+        render: {fillStyle: "#3B3C36"},
         name: "floor"
     }));
     //right
-    borders.push(Matter.Bodies.rectangle(document.body.clientWidth, 0, 50, 800*2, {
+    borders.push(Matter.Bodies.rectangle(document.body.clientWidth, 0, 10, 800 * 2, {
         isStatic: true,
         restitution: 0.8,
-        render: {fillStyle: "red"},
+        render: {fillStyle: "#3B3C36"},
         name: "floor"
     }));
+
     mouse = Matter.Mouse.create(render.canvas);
 
     mouseConstraints = Matter.MouseConstraint.create(engine, {mouse, constraint: {render: {visible: false}}})
@@ -88,7 +89,12 @@ function main() {
      * initialize world
      * */
     Matter.Events.on(mouseConstraints, 'enddrag', (e) => {
-        if (e.body === ball) firing = true
+        if (e.body === ball) firing = true;
+
+        if (e.body.name === "block") {
+            alert("you cannot do this");
+            restart();
+        }
     })
 
 
@@ -112,7 +118,7 @@ function main() {
                     score.add(el.bodyB.id)
                     // score += 1
                     console.log(score.size);
-                    if(score.size === 16){
+                    if (score.size === 16) {
                         return alert("you won the game")
                     }
                 }
