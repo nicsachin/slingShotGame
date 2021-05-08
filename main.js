@@ -6,7 +6,7 @@ let mouseConstraints;
 let ball;
 let sling;
 let firing = false;
-let chances = 1;
+let chances = 10;
 let borders = [];
 let score = new Set();
 let wireFrameMode = false;
