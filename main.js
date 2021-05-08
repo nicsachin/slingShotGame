@@ -16,9 +16,12 @@ function initializeGame() {
 }
 
 function createAssets() {
-    let boxA = Matter.Bodies.rectangle(400, 200, 80, 80);
-    let boxB = Matter.Bodies.rectangle(300, 200, 80, 80);
-    return [boxA,boxB, ground, mouseConstraints];
+    // let boxA = Matter.Bodies.rectangle(400, 200, 80, 80);
+    // let boxB = Matter.Bodies.rectangle(300, 200, 80, 80);
+    let stack = Matter.Composites.stack(200, 200, 4, 4, 0, 0, function (x, y) {
+        return Matter.Bodies.rectangle(x, y, 80, 80);
+    })
+    return [stack, ground, mouseConstraints];
 }
 
 
