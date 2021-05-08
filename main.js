@@ -6,8 +6,10 @@ let mouseConstraints;
 let ball;
 let sling;
 let firing = false;
+let chances = 2;
 
 function initializeGame() {
+    updateDom();
     engine = Matter.Engine.create();
     render = Matter.Render.create({
         element: document.body,
@@ -35,6 +37,15 @@ function createAssets() {
     return [stack, ball, sling, ground, mouseConstraints];
 }
 
+function updateDom(){
+    document.querySelector("#chances").innerText = `Chances left ${chances}`
+}
+
+function restart(){
+    chances = 2;
+    updateDom();
+    window.location.reload();
+}
 
 function main() {
     initializeGame();
@@ -47,12 +58,14 @@ function main() {
     })
 
     Matter.Events.on(engine, 'afterUpdate', (e) => {
-        if (firing && Math.abs(ball.position.x - 300) < 20 && Math.abs(ball.position.y - 600) < 20) {
+        if (firing && Math.abs(ball.position.x - 300) < 20 && Math.abs(ball.position.y - 600) < 20 && chances > 0) {
             // ball
             ball = Matter.Bodies.circle(300, 600, 20);
             Matter.World.add(engine.world, ball);
             sling.bodyB = ball;
             firing =false;
+            chances-=1;
+            updateDom();
         }
     })
 
