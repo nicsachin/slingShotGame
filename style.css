@@ -1,5 +1,12 @@
 .header{
     position: fixed;
     left: 0;
-    right:0;
+    right:80%;
 }
+
+.rulesContainer{
+    position: fixed;
+    left: 50%;
+}
+
+

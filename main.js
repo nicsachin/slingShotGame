@@ -9,6 +9,8 @@ let firing = false;
 let chances = 10;
 let borders = [];
 let score = new Set();
+let wireFrameMode = false;
+
 
 function initializeGame() {
     updateDom();
@@ -17,7 +19,7 @@ function initializeGame() {
         element: document.querySelector(".mainView"),
         engine: engine,
         options: {
-            width: document.body.clientWidth, height: 800, wireframes: false, background: '#607D8B'
+            width: document.body.clientWidth, height: 800, wireframes: wireFrameMode, background: '#607D8B'
         }
     });
     ground = Matter.Bodies.rectangle(1000, 500, 300, 20, {isStatic: true , render : {fillStyle : "#3B3C36"}});
